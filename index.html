@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trường THPT BÌNH YÊN</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    header {
+      background: #35424a;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #35424a;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table th, table td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    table th {
+      background: #e8491d;
+      color: #fff;
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    form label {
+      flex: 1 100%;
+      font-weight: bold;
+    }
+    form input[type="text"],
+    form input[type="number"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form button {
+      padding: 10px 20px;
+      background: #35424a;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    form button:hover {
+      background: #2c3e50;
+    }
+    /* Responsive cho màn hình nhỏ */
+    @media (max-width: 600px) {
+      form {
+        flex-direction: column;
+      }
+      form input, form button {
+        width: 100%;
+      }
+    }
+    .action-btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #fff;
+      margin: 0 2px;
+    }
+    .edit-btn {
+      background: #3498db;
+    }
+    .save-btn {
+      background: #27ae60;
+    }
+    .cancel-btn {
+      background: #95a5a6;
+    }
+    .delete-btn {
+      background: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Trường THPT BÌNH YÊN</h1>
+    <p>Website Quản Lý Thông Tin Lớp Học</p>
+  </header>
+
+  <div class="container">
+    <!-- Bảng dữ liệu -->
+    <section id="dataTableSection">
+      <h2>Danh Sách Lớp Học</h2>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên Lớp</th>
+            <th>Chủ Nhiệm</th>
+            <th>Số Học Sinh</th>
+            <th>Chức Năng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dữ liệu mẫu ban đầu -->
+          <tr>
+            <td>1</td>
+            <td>Lớp 10A1</td>
+            <td>Thầy Nguyễn Văn A</td>
+            <td>45</td>
+            <td>
+              <button class="action-btn edit-btn">Sửa</button>
+              <button class="action-btn delete-btn">Xóa</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Lớp 10B2</td>
+            <td>Cô Trần Thị B</td>
+            <td>42</td>
+            <td>
+              <button class="action-btn edit-btn">Sửa</button>
+              <button class="action-btn delete-btn">Xóa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Form thêm dữ liệu -->
+    <section id="formSection">
+      <h2>Thêm Lớp Học Mới</h2>
+      <form id="dataForm">
+        <label for="className">Tên Lớp:</label>
+        <input type="text" id="className" name="className" placeholder="Ví dụ: Lớp 11A3" required>
+        <label for="teacher">Chủ Nhiệm:</label>
+        <input type="text" id="teacher" name="teacher" placeholder="Ví dụ: Thầy Lê Văn C" required>
+        <label for="studentCount">Số Học Sinh:</label>
+        <input type="number" id="studentCount" name="studentCount" placeholder="Ví dụ: 50" required>
+        <button type="submit">Thêm</button>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    // Lấy phần tử cần thiết
+    const dataForm = document.getElementById('dataForm');
+    const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+
+    // Hàm cập nhật số thứ tự cho bảng
+    function updateSTT() {
+      const rows = dataTable.querySelectorAll('tr');
+      rows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+      });
+    }
+
+    // Hàm xử lý thêm dữ liệu
+    dataForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const className = document.getElementById('className').value;
+      const teacher = document.getElementById('teacher').value;
+      const studentCount = document.getElementById('studentCount').value;
+
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td></td>
+        <td>${className}</td>
+        <td>${teacher}</td>
+        <td>${studentCount}</td>
+        <td>
+          <button class="action-btn edit-btn">Sửa</button>
+          <button class="action-btn delete-btn">Xóa</button>
+        </td>
+      `;
+      dataTable.appendChild(newRow);
+
+      // Cập nhật lại số thứ tự
+      updateSTT();
+
+      // Reset form
+      dataForm.reset();
+    });
+
+    // Hàm xử lý sự kiện cho nút Sửa và Xóa thông qua delegation
+    dataTable.addEventListener('click', function(e) {
+      const target = e.target;
+
+      // Xử lý nút Xóa
+      if (target.classList.contains('delete-btn')) {
+        if (confirm('Bạn có chắc chắn muốn xóa dòng này không?')) {
+          const rowToDelete = target.closest('tr');
+          rowToDelete.remove();
+          updateSTT();
+        }
+      }
+
+      // Xử lý nút Sửa
+      if (target.classList.contains('edit-btn')) {
+        const row = target.closest('tr');
+        if (target.textContent === 'Sửa') {
+          // Chuyển các ô hiện tại thành input
+          const classNameValue = row.cells[1].textContent;
+          const teacherValue = row.cells[2].textContent;
+          const studentCountValue = row.cells[3].textContent;
+
+          row.cells[1].innerHTML = `<input type="text" value="${classNameValue}" style="width:90%">`;
+          row.cells[2].innerHTML = `<input type="text" value="${teacherValue}" style="width:90%">`;
+          row.cells[3].innerHTML = `<input type="number" value="${studentCountValue}" style="width:90%">`;
+
+          // Thay nút Sửa thành nút Lưu và Hủy
+          row.cells[4].innerHTML = `
+            <button class="action-btn save-btn">Lưu</button>
+            <button class="action-btn cancel-btn">Hủy</button>
+          `;
+        }
+      }
+
+      // Xử lý nút Lưu sau khi chỉnh sửa dữ liệu
+      if (target.classList.contains('save-btn')) {
+        const row = target.closest('tr');
+        const newClassName = row.cells[1].querySelector('input').value;
+        const newTeacher = row.cells[2].querySelector('input').value;
+        const newStudentCount = row.cells[3].querySelector('input').value;
+
+        row.cells[1].textContent = newClassName;
+        row.cells[2].textContent = newTeacher;
+        row.cells[3].textContent = newStudentCount;
+
+        // Khôi phục lại nút Sửa và Xóa
+        row.cells[4].innerHTML = `
+          <button class="action-btn edit-btn">Sửa</button>
+          <button class="action-btn delete-btn">Xóa</button>
+        `;
+      }
+
+      // Xử lý nút Hủy khi đang chỉnh sửa dữ liệu
+      if (target.classList.contains('cancel-btn')) {
+        const row = target.closest('tr');
+        // Khôi phục các giá trị ban đầu từ input nếu người dùng hủy chỉnh sửa
+        const originalClassName = row.cells[1].querySelector('input').defaultValue;
+        const originalTeacher = row.cells[2].querySelector('input').defaultValue;
+        const originalStudentCount = row.cells[3].querySelector('input').defaultValue;
+
+        row.cells[1].textContent = originalClassName;
+        row.cells[2].textContent = originalTeacher;
+        row.cells[3].textContent = originalStudentCount;
+        row.cells[4].innerHTML = `
+          <button class="action-btn edit-btn">Sửa</button>
+          <button class="action-btn delete-btn">Xóa</button>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
